@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { IoFilterSharp } from "react-icons/io5";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 // import { AiOutlineShoppingCart } from "react-icons/ai";
 
 const JobPage = () => {
@@ -133,35 +133,43 @@ const JobPage = () => {
       {/* Job List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredJobs.map((job) => (
-          <div key={job.id} className="p-4 bg-white shadow rounded-lg">
-            <h3 className="text-lg font-bold">{job.title}</h3>
-            <p className="text-sm text-gray-500">
-              {job.date} • {job.category}
-            </p>
-            <p className="text-gray-700 mt-2">{job.description}</p>
-            <p className="flex items-center text-gray-600 mt-2">
-              <FaMapMarkerAlt className="mr-1 text-red-500" /> {job.location}
-            </p>
+          <div className="p-6 bg-white shadow-lg rounded-2xl border border-gray-200 hover:shadow-xl transition space-y-4 duration-300">
+            <h3 className="text-xl font-semibold text-gray-800">Install New TV Aerial for Free Channels</h3>
+            <div className="flex justify-between">
+              <p className="text-sm text-gray-500 mt-1">
+                <span className="font-semibold text-base uppercase inline-block mb-1">Posted by</span>  <br /> Anthony, about 7 hours ago
+              </p>
 
-            {/* Job Images */}
-            <div className="flex gap-2 mt-3">
-              {job.images.map((img, index) => (
-                <img
-                  key={index}
-                  src={img}
-                  alt="Job"
-                  className="w-20 h-20 object-cover rounded-md"
-                />
-              ))}
+              <p className="text-sm text-gray-500 mt-1">
+                <span className="font-semibold text-base uppercase inline-block mb-1">Job category</span>  <br /> Aerial & Satellite Dish
+              </p>
+
+            </div>
+            <div className="flex justify-between">
+              <p className="text-sm text-gray-500 mt-1">
+                <span className="font-semibold text-base uppercase inline-block mb-1">Job location</span>  <br /> London SE2, 45 mins from EC1A2AT
+              </p>
+              <p className="text-sm text-gray-500 mt-1">
+                <span className="font-semibold text-base uppercase inline-block mb-1">Posted</span>  <br /> Aerial & Satellite Dish
+              </p>
             </div>
 
-            {/* Buy Job Button */}
-            <button
-              onClick={() => navigate(`/tradePerson/jobs/${job.id}`)}
-              className="mt-4 w-full bg-blue-600 text-white p-2 rounded flex items-center justify-center gap-2"
+
+            {/* Job Images */}
+            <div className="flex gap-3 mt-4">
+              <img
+                src="https://images.pexels.com/photos/6345317/pexels-photo-6345317.jpeg?auto=compress&cs=tinysrgb&w=600"
+                alt="Job"
+                className="w-24 h-24 object-cover rounded-lg border border-gray-300"
+              />
+            </div>
+
+            {/* See Job Button */}
+            <Link to={`/tradePerson/jobs/${job?.id}`}
             >
-              See Job ({job.price} credits)
-            </button>
+              <button className="py-2 bg-pink-700 text-white w-full mt-4">See details</button>
+
+            </Link>
           </div>
         ))}
       </div>
