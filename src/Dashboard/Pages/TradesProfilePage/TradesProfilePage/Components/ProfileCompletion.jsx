@@ -1,18 +1,18 @@
 import React, { useContext } from "react";
 import { AuthContext } from "../../../../../Authentication/AuthProvider";
 
-const ProfileCompletion = ({ progress }) => {
-  const radius = 60; 
-  const stroke = 4; 
+const ProfileCompletion = ({ progress, w, h, heading }) => {
+  const radius = 60;
+  const stroke = 4;
   const normalizedRadius = radius - stroke * 0.5;
   const circumference = normalizedRadius * 2 * Math.PI;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
-  const {user} = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   return (
     <div className="flex flex-col items-center space-y-2 relative">
       {/* Circular Progress Container */}
-      <div className="relative w-52 h-52  flex items-center justify-center">
+      <div className={`relative  w-${w} h-${h} flex items-center justify-center`}>
         <svg
           width={radius * 2}
           height={radius * 2}
@@ -43,17 +43,20 @@ const ProfileCompletion = ({ progress }) => {
           />
         </svg>
         {/* Profile Image */}
-        <div className="absolute w-40 h-40 rounded-full overflow-hidden">
-          <img
-            className="w-full h-full object-cover"
-            src={user?.profileImage.url}
-            alt="Profile"
-          />
-        </div>
+        {
+          heading == 'Profile update' && <div className="absolute w-40 h-40 rounded-full overflow-hidden">
+            <img
+              className="w-full h-full object-cover"
+              src={user?.profileImage.url}
+              alt="Profile"
+            />
+          </div>
+        }
+
       </div>
       {/* Progress Text */}
       <p className="text-xl font-semibold">{progress}%</p>
-      <p className="text-gray-500 text-sm">PROFILE COMPLETE</p>
+      <p className="text-gray-500 text-sm uppercase">{heading}</p>
     </div>
   );
 };

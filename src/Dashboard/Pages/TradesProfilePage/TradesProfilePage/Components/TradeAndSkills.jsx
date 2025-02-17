@@ -188,7 +188,7 @@ const TradeAndSkills = ({user}) => {
                                     key={index}
                                     onClick={() => handleSkillSelection(skill)}
                                     className={`${selectedSkills.includes(skill) ? "bg-gray-300 text-white" : "bg-white text-gray-700"
-                                        } border border-gray-400 px-4 p-1 m-1 text-xs md:text-sm`}
+                                    } border py-2 border-gray-300 rounded-sm px-4 p-1 m-1 text-xs md:text-sm`}
                                 >
                                     <label
                                         className={`flex items-center gap-2 cursor-pointer ${selectedSkills.includes(skill) ? "text-black" : "text-gray-700"

@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { FaCamera } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaCamera, FaCheck } from "react-icons/fa";
 import userImage from "../../../../../files/user.jpg";
 import useAxiosSecure from "../../../../../Hooks/useAxiosSecure";
 import { toast } from "sonner";
+import ProfileCompletion from "./ProfileCompletion";
+import { progress } from "framer-motion";
 
 const ProfileDetails = ({ user }) => {
   const [imagePreview, setImagePreview] = useState(user?.profileImage?.url);
@@ -15,6 +17,7 @@ const ProfileDetails = ({ user }) => {
   const [businessType, setBusinessType] = useState(user?.businessType || "");
   const [employeeCount, setEmployeeCount] = useState(user?.employeeCount || "");
   const [companyWebsite, setCompanyWebsite] = useState(user?.companyWebsite || "");
+  const [progress, setProgress] = useState()
 
   const axiosSecure = useAxiosSecure();
 
@@ -28,56 +31,35 @@ const ProfileDetails = ({ user }) => {
     }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // Collect form data
-    const formData = {
-      firstName,
-      lastName,
-      phone,
-      experience,
-      bio,
+  useEffect(() => {
+    const totalFields = 6; // Total number of required fields
+    const filledFields = [
       businessType,
-      employeeCount,
-      companyWebsite,
-      profileImagePublicID: user?.profileImage?.publicId // or the path to the image if you upload it separately
-    };
+      bio,
+      experience,
+      phone,
+      lastName,
+      firstName,
+      imagePreview // File should also be checked
+    ].filter(Boolean).length;
+    console.log();
 
-    const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      formDataToSend.append(key, value);
-    });
-
-    if(profileImageFile){
-        formDataToSend.append("profileImage", profileImageFile);
-    }
-
-    // Send the data to the backend
-    axiosSecure.post("/update-profile", formDataToSend)
-        .then(res=>{
-            if(res?.data?.success){
-                
-                toast.success(res.data.message)
-            }else{
-                toast.error(res.data.message+"--" || "Something went wrong")
-            }
-        }).catch(err=>{
-            console.log(err);
-            toast.error(err.response.data.message || "An error occurred while updating the profile.")
-        })
-
-  };
+    setProgress(Math.round((filledFields / totalFields) * 100))
+  }, [])
 
   return (
     <div className="space-y-10 lg:px-20 rounded-md shadow-md bg-white p-6">
-      {/* Image Upload */}
+      <div className="flex justify-end">
+        {
+          progress == 100 ? <p className="border p-2 border-green-400 rounded-full"><FaCheck size={25} className="text-green-700"/> </p> : <ProfileCompletion h={10} w={10} heading={''} progress={progress} />
+        }
+      </div>
       <div className="flex flex-col lg:flex-row gap-10">
         <div>
           <div className="flex justify-center items-center relative">
             <div className="relative group border-2 overflow-hidden w-40 h-40 rounded-full">
               <img
-                src={imagePreview || userImage}
+                src={userImage}
                 alt="Profile"
                 className="w-full h-full"
               />
@@ -91,7 +73,7 @@ const ProfileDetails = ({ user }) => {
                 type="file"
                 id="imageInput"
                 accept="image/*"
-                onChange={handleImageUpload}
+                // onChange={handleImageUpload}
                 className="hidden"
               />
             </div>
@@ -101,7 +83,7 @@ const ProfileDetails = ({ user }) => {
         <div className="flex-1">
           <textarea
             value={bio}
-            onChange={(e) => setBio(e.target.value)}
+            // onChange={(e) => setBio(e.target.value)}
             placeholder="Write about your trade"
             className="textarea focus:outline-none h-40 w-full border border-gray-300 bg-gray-50 p-2 textarea-md"
           ></textarea>
@@ -111,7 +93,7 @@ const ProfileDetails = ({ user }) => {
 
       <hr className="border-gray-300" />
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form className="space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -185,12 +167,12 @@ const ProfileDetails = ({ user }) => {
               employeeCount <span className="text-red-500">*</span>
             </label>
             <input
-            value={employeeCount}
-            onChange={(e) => setEmployeeCount(e.target.value)}
-            type="number"
-            placeholder="Number of employees"
-            className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
-          />
+              value={employeeCount}
+              onChange={(e) => setEmployeeCount(e.target.value)}
+              type="number"
+              placeholder="Number of employees"
+              className="w-full px-4 py-2 border border-gray-300 bg-gray-50 rounded focus:outline-none focus:ring-1 focus:ring-blue-300"
+            />
           </div>
         </div>
         <div>

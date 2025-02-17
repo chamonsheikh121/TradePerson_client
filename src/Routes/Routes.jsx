@@ -10,7 +10,6 @@ import HowItWorks from "../Pages/HowItWorks/HowItWorks";
 import AskATrade from "../Pages/AskATrade/AskATrade";
 import ServiceSeeker from "../Pages/Registration/ServiceSeeker";
 import CustomerProfilePage from './../Dashboard/Pages/CustomerProfilePage/CustomerProfilePage';
-import CustomerDashboard from "../Dashboard/Pages/CustomerProfilePage/CustomerDashboard";
 import TradesProfilePage from "../Dashboard/Pages/TradesProfilePage/TradesProfilePage";
 import AdminDashboard from "../Dashboard/Pages/AdminProfilePage/AdminDashboard/AdminDashboard";
 import AdminProfilePage from "../Dashboard/Pages/AdminProfilePage/AdminProfilePage/AdminProfilePage";
@@ -101,10 +100,6 @@ const Routes = createBrowserRouter([
             {
                 path: 'profile',
                 element: <CustomerProfilePage />
-            },
-            {
-                path: 'dashboard',
-                element: <CustomerDashboard />
             },
             {
                 path: 'message',

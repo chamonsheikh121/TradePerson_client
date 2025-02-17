@@ -44,11 +44,10 @@ const TradesProfilePage = () => {
         {tabList.map((tab) => (
           <button
             key={tab.key}
-            className={`relative px-6 py-3 transition-all duration-300 ${
-              activeTab === tab.key
+            className={`relative px-6 py-3 transition-all duration-300 ${activeTab === tab.key
                 ? "text-blue-600 bg-white rounded-md"
                 : "text-gray-500 rounded-md bg-gray-100 hover:text-blue-500"
-            }`}
+              }`}
             onClick={() => setActiveTab(tab.key)}
           >
             {tab.label}
@@ -71,19 +70,22 @@ const TradesProfilePage = () => {
         transition={{ duration: 0.3 }}
         className=" mt-6"
       >
-        {user.profileImage?.url && activeTab === "profile" && (
+        {/* {user.profileImage?.url && activeTab === "profile" && (
+          <ProfileDetails user={user} />
+        )} */}
+        {activeTab === "profile" && (
           <ProfileDetails user={user} />
         )}
-        {user.profileImage?.url && activeTab === "gallery" && (
+        {activeTab === "gallery" && (
           <JobGalleries user={user} />
         )}
-        {user.profileImage?.url && activeTab === "skills" && (
+        {activeTab === "skills" && (
           <TradeAndSkills user={user} />
         )}
-        {user.profileImage?.url && activeTab === "home" && (
+        {activeTab === "home" && (
           <HomeAddress user={user} />
         )}
-        {user.profileImage?.url && activeTab === "business" && (
+        {activeTab === "business" && (
           <BusinessAddress user={user} />
         )}
       </motion.div>

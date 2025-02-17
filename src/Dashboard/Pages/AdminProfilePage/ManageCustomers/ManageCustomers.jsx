@@ -99,24 +99,7 @@ const ManageCustomers = () => {
                 "photoUrl": "https://images.pexels.com/photos/6345317/pexels-photo-6345317.jpeg?auto=compress&cs=tinysrgb&w=600"
             }
         ],
-        "suspended": [
-            {
-                "firstName": "Robert",
-                "lastName": "Wilson",
-                "email": "robertwilson@example.com",
-                "phone": "7418529630",
-                "password": "PassWord963@",
-                "confirmPassword": "PassWord963@",
-                "trade": "Welder",
-                "postcode": "15975",
-                "status": "suspended",
-                "isSuspended": false,
-                "experience": "7 years",
-                "companyName": "Wilson Welding",
-                "registrationNumber": "REG15975",
-                "photoUrl": "https://images.pexels.com/photos/6345317/pexels-photo-6345317.jpeg?auto=compress&cs=tinysrgb&w=600"
-            }
-        ]
+       
     };
 
 
@@ -126,7 +109,7 @@ const ManageCustomers = () => {
 
         { key: "active", label: "Active" },
         { key: "notVerified", label: "notVerified" },
-        { key: "suspended", label: "Suspended" }
+    
     ];
 
 

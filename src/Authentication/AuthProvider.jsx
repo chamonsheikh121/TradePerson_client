@@ -69,7 +69,7 @@ const AuthProvider = ({ children }) => {
 
 
 
-  const authValue = { isAuthenticated:true, isLoading, userRole:'tradePerson', user, logOut, loginSuccess };
+  const authValue = { isAuthenticated:true, isLoading, userRole:'tradePerson', user, logOut, loginSuccess};
 
 
   return (

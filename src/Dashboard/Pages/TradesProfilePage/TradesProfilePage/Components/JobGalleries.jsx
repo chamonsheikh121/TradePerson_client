@@ -1,37 +1,53 @@
 import { useState, useEffect } from "react";
 import { MdOutlineModeEditOutline, MdClose } from "react-icons/md";
 import { SlCloudUpload } from "react-icons/sl";
-import { FaArrowLeft, FaArrowRight, FaTrash } from "react-icons/fa";
+import { FaArrowLeft, FaArrowRight, FaCheck, FaTrash } from "react-icons/fa";
 import axios from "axios";
 import useAxiosSecure from "../../../../../Hooks/useAxiosSecure";
 import { toast } from "sonner";
+import ProfileCompletion from "./ProfileCompletion";
+import { progress } from 'framer-motion';
 
 const JobGalleries = ({ user }) => {
   const [images, setImages] = useState([]);
+  const [progress, setProgress] = useState()
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const axiosSecure = useAxiosSecure();
-  
-    const fetchImages = async () => {
-      try {
-        const res = await axiosSecure.get("/get-job-gallery");
-        console.log(res);
 
-          setImages(res?.data?.jobGalleries || []);
-        
-      } catch (error) {
-        toast.error(error?.response?.data?.message || "Something went wrong!");
-      }
-    };
+  // const fetchImages = async () => {
+  //   try {
+  //     const res = await axiosSecure.get("/get-job-gallery");
+  //     console.log(res);
+
+  //       setImages(res?.data?.jobGalleries || []);
+
+  //   } catch (error) {
+  //     toast.error(error?.response?.data?.message || "Something went wrong!");
+  //   }
+  // };
+
+  // useEffect(() => {
+
+  //   fetchImages();
+
+  // }, [axiosSecure]); 
 
   useEffect(() => {
-    
-    fetchImages();
-  
-  }, [axiosSecure]); 
+
+    let imageProgress = 0;
+    if (images?.length == 1) {
+      imageProgress = 50;
+    } else if (images.length >= 2) {
+      imageProgress = 100;
+    }
+
+    setProgress(imageProgress);
+  }, [images]); // Add dependencies to re-run when they change
+
 
   // Open Modal
   const openModal = (index) => {
@@ -62,65 +78,70 @@ const JobGalleries = ({ user }) => {
   };
 
   // Handle Image Upload
-  const handleImageUpload = async (event) => {
-    const file = event.target.files[0];
-    if (!file) return;
+  // const handleImageUpload = async (event) => {
+  //   const file = event.target.files[0];
+  //   if (!file) return;
 
-    const formData = new FormData();
-    formData.append("jobImage", file);
+  //   const formData = new FormData();
+  //   formData.append("jobImage", file);
 
-    setUploading(true);
+  //   setUploading(true);
 
-    try {
-      const response = await axiosSecure.post(
-        "/update-profile/job-gallery",
-        formData
-      );
+  //   try {
+  //     const response = await axiosSecure.post(
+  //       "/update-profile/job-gallery",
+  //       formData
+  //     );
 
-      if (response.data.success) {
-        toast.success(response.data.message);
-      } else {
-        toast.error("something went wrong");
-      }
+  //     if (response.data.success) {
+  //       toast.success(response.data.message);
+  //     } else {
+  //       toast.error("something went wrong");
+  //     }
 
-      fetchImages();
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      toast.error(error.response.data.message || "something went wrong");
-    } finally {
-      setUploading(false);
-    }
-  };
+  //     fetchImages();
+  //   } catch (error) {
+  //     console.error("Error uploading image:", error);
+  //     toast.error(error.response.data.message || "something went wrong");
+  //   } finally {
+  //     setUploading(false);
+  //   }
+  // };
 
   // Delete Image
-  const deleteImage = async () => {
-    setDeleting(true);
-    if (!selectedImage) return;
+  // const deleteImage = async () => {
+  //   setDeleting(true);
+  //   if (!selectedImage) return;
 
-    try {
-      const response = await axiosSecure.post("/delete-job-image", {
-        imageUrl: selectedImage, // Sending image to delete
-      });
-      if (response.data.success) {
-        toast.success(response.data.message);
-        setDeleting(false);
-      } else {
-        toast.error("something went wrong");
-        setDeleting(false);
-      }
-      const updatedImages = images.filter((img) => img !== selectedImage);
-      fetchImages()
-      closeModal();
-      setDeleting(false);
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      toast.error( error?.response?.data.message || "Error deleting image");
-      setDeleting(false);
-    }
-  };
+  //   try {
+  //     const response = await axiosSecure.post("/delete-job-image", {
+  //       imageUrl: selectedImage, // Sending image to delete
+  //     });
+  //     if (response.data.success) {
+  //       toast.success(response.data.message);
+  //       setDeleting(false);
+  //     } else {
+  //       toast.error("something went wrong");
+  //       setDeleting(false);
+  //     }
+  //     const updatedImages = images.filter((img) => img !== selectedImage);
+  //     fetchImages()
+  //     closeModal();
+  //     setDeleting(false);
+  //   } catch (error) {
+  //     console.error("Error deleting image:", error);
+  //     toast.error( error?.response?.data.message || "Error deleting image");
+  //     setDeleting(false);
+  //   }
+  // };
 
   return (
     <div className="p-10 lg:px-32 space-y-4 rounded-md shadow-md bg-white">
+      <div className="flex justify-end">
+        {
+          progress == 100 ? <p className="border p-2 border-green-400 rounded-full"><FaCheck size={25} className="text-green-700" /> </p> : <ProfileCompletion h={10} w={10} heading={''} progress={progress} />
+        }
+      </div>
       {/* Upload Section */}
       <label className="border flex cursor-pointer hover:bg-gray-100 transition-all justify-center items-center border-dashed border-gray-600 h-40">
         <div className="flex flex-col items-center gap-2">
@@ -128,10 +149,10 @@ const JobGalleries = ({ user }) => {
           <h4>{uploading ? "Uploading..." : "Upload image"}</h4>
         </div>
         <input
-            disabled={uploading}
+          disabled={uploading}
           type="file"
           accept="image/*"
-          onChange={handleImageUpload}
+          // onChange={handleImageUpload}
           className="hidden"
         />
       </label>
@@ -178,14 +199,14 @@ const JobGalleries = ({ user }) => {
                 <FaArrowLeft />
               </button>
               <button
-              disabled={deleting}
+                disabled={deleting}
                 className="bg-red-500 flex items-center justify-center gap-2 text-white px-4 py-2 rounded-md"
                 onClick={deleteImage}
               >
-                <FaTrash /> { deleting? "Deleting.." : "Delete"}
+                <FaTrash /> {deleting ? "Deleting.." : "Delete"}
               </button>
               <button
-              
+
                 className="bg-gray-200 px-4 py-2 rounded-md"
                 onClick={nextImage}
               >

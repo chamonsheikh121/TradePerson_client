@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { AuthContext } from "../../../../../Authentication/AuthProvider";
+import { TfiTimer } from "react-icons/tfi";
+import { TbUrgent } from "react-icons/tb";
 
 const jobs = [
   {
@@ -48,7 +50,7 @@ const JobDetail = () => {
   const [isPurchased, setIsPurchased] = useState(false);
   const [hiddenEmail, setHiddenEmail] = useState('')
   const [hiddenPhone, setHiddenPhone] = useState('')
-
+  const jobStatus = 'deleted'
 
 
 
@@ -77,12 +79,30 @@ const JobDetail = () => {
   return (
     <div className="max-w-3xl space-y-4 mx-auto text-gray-700 p-6 bg-white shadow rounded-lg mt-6">
       {/* Back Button */}
-      <button
-        onClick={() => navigate(-1)}
-        className="flex items-center text-pink-600 font-semibold mb-4"
-      >
-        <AiOutlineArrowLeft className="mr-1" /> Back to Jobs
-      </button>
+      <div className="flex justify-between">
+        <button
+          onClick={() => navigate(-1)}
+          className="flex items-center text-pink-600 font-semibold mb-4"
+        >
+          <AiOutlineArrowLeft className="mr-1" /> Back to Jobs
+        </button>
+        <button
+
+          className="flex text-sm items-center  mb-4"
+        >
+          Id : <span
+
+            onClick={() => {
+              {
+                navigator.clipboard.writeText('chamon ali')
+                  .then(() => alert("Id Copied!"))
+                  .catch(err => console.error("Failed to copy text:", err));
+              }
+            }}
+
+            className="text-pink-600 pl-2">asjlkcaj cla kcjakja</span>
+        </button>
+      </div>
 
       {/* Owner Profile Section (Like a Facebook Post) */}
       <div>
@@ -131,14 +151,46 @@ const JobDetail = () => {
       <div>
         <span className="font-semibold text-base text-gray-500 uppercase inline-block mb-1">Job location</span>
         <p className="flex items-center text-gray-600 mt-2">
-          <FaMapMarkerAlt className="mr-1 text-red-500" /> {job.location}
+          <FaMapMarkerAlt className="mr-1 text-gray-500" /> {job.location}
         </p>
+      </div>
+      <div className="flex items-center gap-20">
+        <div>
+          <span className="font-semibold text-base text-gray-500 uppercase inline-block mb-1">Deadline</span>
+          <p className="flex items-center text-gray-600 mt-2">
+            <TfiTimer className="mr-1 text-gray-500" /> 11 july 2025
+          </p>
+        </div>
+        <div>
+          <span className="font-semibold text-base text-gray-500 uppercase inline-block mb-1">Urgency</span>
+          <p className="flex items-center text-gray-600 mt-2">
+            <TbUrgent className="mr-1 text-gray-500" /> Immediate
+          </p>
+        </div>
       </div>
 
       {/* Price & Purchase Section */}
-      {userRole == 'admin' ? <div>
+      {userRole == 'admin' ? <div className="flex border-t gap-20 py-4 items-center">
 
-        I am admin
+        {
+          jobStatus != 'deleted' && <button
+
+            className="mt-4 w-full text-red-600 bg-gray-100 p-3 rounded-sm font-semibold"
+          >
+            Delete job
+          </button>
+        }
+
+
+        {
+          jobStatus !== 'active' && <button
+
+            className="mt-4 w-full text-green-600  bg-gray-100 p-3 rounded-sm font-semibold"
+          >
+            Approve job
+          </button>
+        }
+
 
       </div> : !isPurchased ?
 

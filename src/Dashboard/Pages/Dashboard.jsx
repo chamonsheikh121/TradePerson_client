@@ -1,6 +1,6 @@
 import { FaUserCircle, FaTasks } from "react-icons/fa";
 import { useContext, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import DashboardSidebar from "../Shared/DashboardSidebar";
 import MobileNavbar from "../Shared/MobileNav.jsx";
 import { AuthContext } from "../../Authentication/AuthProvider.jsx";
