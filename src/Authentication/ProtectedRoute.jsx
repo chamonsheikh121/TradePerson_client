@@ -1,38 +1,71 @@
+// src/Authentication/ProtectedRoute.jsx
 import { Navigate, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { toast } from 'sonner';
 import LoadingScreen from '../Components/LoadingScreen';
 import { AuthContext } from './AuthProvider';
+import { ROLES, ROLE_HIERARCHIES } from '../config/roles';
 
+const ProtectedRoute = ({ children, requiredRoles = [ROLES.CUSTOMER] }) => {
+  const { isAuthenticated, userRole, isLoading, user, checkAuth } = useContext(AuthContext);
+  const location = useLocation();
 
-const ProtectedRoute = ({ children, requiredRole }) => {
+  // Normalize and validate roles
+  const normalizedUserRole = userRole?.toLowerCase();
+  const normalizedRequiredRoles = requiredRoles.map(role => role.toLowerCase());
 
-  const { isAuthenticated, userRole, isLoading, loginSuccess } = useContext(AuthContext);
-  
-  console.log(isAuthenticated, userRole);
+  // Debugging effect
+  useEffect(() => {
+    console.log('Protected Route Debug:', {
+      isAuthenticated,
+      userRole,
+      isLoading,
+      requiredRoles: normalizedRequiredRoles
+    });
+  }, [isAuthenticated, userRole, isLoading, requiredRoles]);
 
-  if(isLoading) {
+  // Loading state
+  if (isLoading) {
     return <LoadingScreen />;
   }
 
-  // Redirect to login if not authenticated
+  // Authentication check
   if (!isAuthenticated) {
-    toast.warning("You are not authenticated.", {id: 1});
-    return <Navigate state={location.pathname} to="/account/login" />;
+    toast.warning("Please log in to access this page.", { 
+      id: 'auth-warning',
+      duration: 3000 
+    });
+    return (
+      <Navigate 
+        to="/account/login" 
+        state={{ 
+          from: location.pathname, 
+          message: "You need to log in to access this page." 
+        }} 
+      />
+    );
   }
 
-  // Check user role for access control
-  if (!requiredRole.includes(userRole)) {
-    toast.warning("You Have No Access To This Page.", {id: 1});
+  // Role-based access with hierarchical check
+  const hasAccess = normalizedRequiredRoles.some(requiredRole => 
+    ROLE_HIERARCHIES[requiredRole]?.includes(normalizedUserRole)
+  );
+
+  if (!hasAccess) {
+    toast.error("You do not have permission to access this page.", { 
+      id: 'role-warning',
+      duration: 3000 
+    });
     return <Navigate to="/" />;
   }
 
   return children;
 };
+
 ProtectedRoute.propTypes = {
   children: PropTypes.node.isRequired,
-  requiredRole: PropTypes.arrayOf(PropTypes.string),
+  requiredRoles: PropTypes.arrayOf(PropTypes.string)
 };
 
 export default ProtectedRoute;

@@ -11,7 +11,8 @@ const MainLayout = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const {userRole} = useContext(AuthContext);
-
+  console.log(userRole);
+  
   const navLinks = [
     { path: "/", label: "Home" },
     { path: "/how-it-works", label: "How it works" },

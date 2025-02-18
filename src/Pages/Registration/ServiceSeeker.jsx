@@ -19,7 +19,7 @@ const ServiceSeeker = () => {
 
   const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    setImage( file);
+    setImage(file);
     if (file) {
       const reader = new FileReader();
       reader.onload = () => setImagePreview(reader.result);
@@ -27,61 +27,72 @@ const ServiceSeeker = () => {
     }
   };
 
+  // ServiceSeeker.jsx
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
-    // Create FormData
-    const form = new FormData(e.target);
-    const firstName = form.get("firstName");
-    const lastName = form.get("lastName");
-    const email = form.get("email");
-    const phone = form.get("phone");
-    const postCode = form.get("postcode");
-    const confirmPassword = form.get("confirmPassword");
-
-    // Collecting form details
-    const formDetails = {
-      firstName,
-      lastName: lastName || "Not provided",
-      email,
-      phone,
-      postCode,
-      password,
-    };
-
-    const formDataToSend = new FormData();
-
-    Object.entries(formDetails).forEach(([key, value]) => {
-      formDataToSend.append(key, value);
-    });
-
-    // Append profile image to form data
-    if (image) {
-      formDataToSend.append("profileImage", image);
-    }else{
-      toast.error("upload a profile Image!");
+    if (!image) {
+      toast.error("Upload a profile image!");
       return;
     }
 
-    if(confirmPassword !== password){
+    if (confirmPassword !== password) {
       toast.error("Passwords don't match");
       return;
     }
 
-    if(!terms){
+    if (!terms) {
       toast.error("Accept terms & conditions.");
       return;
     }
 
     try {
-      // Sending form data to API
-      const response = await axiosSecure.post("/auth/customer/register", formDataToSend);
-      toast.success(response?.data?.message)
+      setLoading(true);
+      // Create FormData object
+      const formData = new FormData();
+      formData.append('firstName', e.target.firstName.value);
+      formData.append('lastName', e.target.lastName.value);
+      formData.append('email', e.target.email.value);
+      formData.append('phone', e.target.phone.value);
+      formData.append('password', password);
+      formData.append('postcode', e.target.postcode.value);
+      formData.append('imageInput', image);
+
+      const response = await axiosSecure.post(
+        "/auth/customer/register",
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+        // Clear form
+        e.target.reset();
+        setImage(null);
+        setImagePreview("");
+        setPassword("");
+        setConfirmPassword("");
+        setTerms(false);
+
+        // Navigate after a short delay
+        setTimeout(() => {
+          navigate('/account/login');
+        }, 1500); // Give time for the success message to be seen
+      }
+
     } catch (error) {
       console.error("Error submitting the form: ", error);
-      toast.error(error?.response?.data?.message || "Error submitting the form." );
+      toast.error(error?.response?.data?.message || "Registration failed");
+    } finally {
+      setLoading(false);
     }
   };
+
 
   const inputValidationHandler = (e) => {
     e.target.value
@@ -274,12 +285,11 @@ const ServiceSeeker = () => {
                 name="confirmPassword"
                 id="confirmPassword"
                 placeholder="Confirm your password"
-                className={`w-full p-3 border ${
-                  confirmPassword &&
+                className={`w-full p-3 border ${confirmPassword &&
                   (isPasswordValid
                     ? "border-green-500 bg-green-50"
                     : "border-red-500 bg-red-50")
-                } rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none`}
+                  } rounded-md focus:ring-2 focus:ring-green-500 focus:outline-none`}
                 required
               />
               <div
@@ -301,7 +311,7 @@ const ServiceSeeker = () => {
           <input
             type="checkbox"
             checked={terms}
-            onChange={()=>setTerms(!terms)}
+            onChange={() => setTerms(!terms)}
             className="h-5 w-5 border-gray-300 rounded"
           />
           <label htmlFor="terms" className="text-sm text-gray-500">
@@ -312,11 +322,39 @@ const ServiceSeeker = () => {
           </label>
         </div>
 
+        // Submit button for both forms
         <button
           type="submit"
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-md"
+          disabled={loading}
+          className="w-full py-3 text-white bg-green-500 hover:bg-green-600 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Create Account
+          {loading ? (
+            <div className="flex items-center justify-center">
+              <svg
+                className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              Registering...
+            </div>
+          ) : (
+            "Register"
+          )}
         </button>
       </form>
     </div>
