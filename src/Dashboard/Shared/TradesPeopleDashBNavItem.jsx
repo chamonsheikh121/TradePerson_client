@@ -14,47 +14,47 @@ import { PiShoppingCartSimpleLight } from "react-icons/pi";
 const TradesPeopleDashBNavItem = ({ isSidebarOpen }) => {
     const Routes = [
         {
-            path: "/tradePerson/dashboard",
+            path: "/tradesperson/dashboard",
             label: "dashboard",
             icon: <LuLayoutDashboard size={25} />,
         },
         {
-            path: "/tradePerson/profile",
+            path: "/tradesperson/profile",
             label: "profile",
             icon: <HiOutlineUserCircle size={25} />,
         },
         {
-            path: "/tradePerson/message",
+            path: "/tradesperson/message",
             label: "message",
             icon: <TbMessageDots size={25} />,
         },
         {
-            path: "/tradePerson/jobs",
+            path: "/tradesperson/jobs",
             label: "jobs",
             icon: <IoBriefcaseOutline size={25} />,
         },
         {
-            path: "/tradePerson/credits",
+            path: "/tradesperson/credits",
             label: "Credits",
             icon: <PiShoppingCartSimpleLight size={25} />,
         },
         {
-            path: "/tradePerson/membership",
+            path: "/tradesperson/membership",
             label: "membership",
             icon: <GoCreditCard size={25} />,
         },
         {
-            path: "/tradePerson/billing",
+            path: "/tradesperson/billing",
             label: "billing",
             icon: <LiaWalletSolid  size={25} />,
         },
         // {
-        //     path: "/tradePerson/addons",
+        //     path: "/tradesperson/addons",
         //     label: "addons",
         //     icon: <TbPlus size={25} />,
         // },
         {
-            path: "/tradePerson/settings/account",
+            path: "/tradesperson/settings/account",
             label: "settings",
             icon: <SlSettings size={25} />,
         },

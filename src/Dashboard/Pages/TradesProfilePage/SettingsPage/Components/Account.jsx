@@ -11,7 +11,7 @@ const Account = () => {
 
 
 
-            <div className=" bg-white  rounded-lg">
+            <div className=" space-y-14 bg-white  rounded-lg">
                 <h2 className="text-xl font-semibold mt-10 mb-6">Security</h2>
                 {/* Change Password Section */}
                 <div className="border-b pb-4 mb-4">
@@ -54,6 +54,17 @@ const Account = () => {
                     </button>
                 </div>
                 <Preferences />
+                <div className="border-b pb-4 bg-red-100 p-4 mb-4 flex justify-between items-center">
+                    <div>
+                        <h3 className="text-lg font-semibold">Delete my account</h3>
+                        <p className="text-sm text-gray-600">
+                            After deleting your account all the information will not be able to restore.
+                        </p>
+                    </div>
+                    <button className="bg-red-200 text-red-700 px-4 py-2 rounded hover:bg-red-300">
+                        delete
+                    </button>
+                </div>
 
 
 

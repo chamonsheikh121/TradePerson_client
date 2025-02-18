@@ -4,6 +4,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 // import { AiOutlineShoppingCart } from "react-icons/ai";
 
+
 const JobPage = () => {
   // Sample job data
   const jobs = [
@@ -37,6 +38,8 @@ const JobPage = () => {
     },
   ];
 
+  const urgencyOptions = ["Immediate", "Within a week", "Flexible"];
+
   // State for filters
   const [filter, setFilter] = useState({
     category: "",
@@ -69,65 +72,54 @@ const JobPage = () => {
       </div>
 
       {/* Filter Section */}
-      <div className="bg-white p-6 rounded-lg shadow-md flex flex-wrap gap-4 items-center mb-6">
-        {/* Category Filter */}
-        <div className="flex flex-col">
-          <label className="text-gray-600 text-sm font-medium">Category</label>
-          <select
+      <div className="bg-white p-6 rounded-lg shadow-md flex  flex-wrap gap-4 items-center mb-6">
+        {/* Search by Job Category */}
+        <div className="flex flex-col flex-1">
+          <label className="text-gray-600 text-sm font-medium mb-2">Job Category</label>
+          <input
+            type="text"
             className="p-2 border rounded focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            placeholder="Search category (e.g. Aerial & Satellite Dish)"
             value={filter.category}
             onChange={(e) => setFilter({ ...filter, category: e.target.value })}
+          />
+        </div>
+
+        {/* Posted Date Range Filter */}
+        <div className="flex flex-col">
+          <label className="text-gray-600 text-sm font-medium mb-2">Posted at</label>
+          <select
+            className="p-2 border rounded focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            value={filter.dateRange}
+            onChange={(e) => setFilter({ ...filter, dateRange: e.target.value })}
           >
-            <option value="">All Categories</option>
-            <option value="Web Development">Web Development</option>
-            <option value="Graphic Design">Graphic Design</option>
+            <option value="">Select</option>
+            <option value="2days">2 Days Ago</option>
+            <option value="3days">3 Days Ago</option>
+            <option value="4days">4 Days Ago</option>
+            <option value="1week">1 Week Ago</option>
+            <option value="1month">1 Month Ago</option>
           </select>
         </div>
 
-        {/* Price Range */}
+        {/* Urgency Filter */}
         <div className="flex flex-col">
-          <label className="text-gray-600 text-sm font-medium">
-            Min Price (৳)
-          </label>
-          <input
-            type="number"
+          <label className="text-gray-600 text-sm font-medium mb-2">Urgency</label>
+          <select
             className="p-2 border rounded focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            placeholder="e.g. 1000"
-            value={filter.minPrice}
-            onChange={(e) => setFilter({ ...filter, minPrice: e.target.value })}
-          />
+            value={filter.urgency}
+            onChange={(e) => setFilter({ ...filter, urgency: e.target.value })}
+          >
+            <option value="">All</option>
+            {urgencyOptions.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
         </div>
 
-        <div className="flex flex-col">
-          <label className="text-gray-600 text-sm font-medium">
-            Max Price (৳)
-          </label>
-          <input
-            type="number"
-            className="p-2 border rounded focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            placeholder="e.g. 5000"
-            value={filter.maxPrice}
-            onChange={(e) => setFilter({ ...filter, maxPrice: e.target.value })}
-          />
-        </div>
-
-        {/* Date Filter */}
-        <div className="flex flex-col">
-          <label className="text-gray-600 text-sm font-medium">
-            Posted After
-          </label>
-          <input
-            type="date"
-            className="p-2 border rounded focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            value={filter.date}
-            onChange={(e) => setFilter({ ...filter, date: e.target.value })}
-          />
-        </div>
-
-        {/* Apply Filter Button */}
-        <button className="p-2 px-4 bg-blue-600 text-white rounded-lg flex items-center gap-2 hover:bg-blue-700 transition-all mt-5">
-          <IoFilterSharp className="text-lg" /> Apply Filters
-        </button>
+       
       </div>
 
       {/* Job List */}

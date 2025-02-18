@@ -10,7 +10,7 @@ const ProfileHeader = () => {
     return (
         <div className="flex p-10 flex-col lg:flex-row shadow-md rounded-md  bg-white items-center gap-10">
 
-            <ProfileCompletion progress={user?.profileCompletion || 0} />
+            <ProfileCompletion h={52} w={52} heading={'Profile update'} progress={50} />
 
             <div className="flex-1 space-y-4">
                 <div>

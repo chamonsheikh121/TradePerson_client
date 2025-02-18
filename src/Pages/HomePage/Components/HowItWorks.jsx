@@ -28,7 +28,7 @@ const HowItWorks = () => {
             <h1 className="md:text-2xl font-semibold text-xl ">
               Post you job
             </h1>
-            <p>Describe what job/project you require a tradesPerson for</p>
+            <p>Describe what job/project you require a tradesperson for</p>
           </div>
           <div className="space-y-4">
             <div className="md:h-[400px] h-[300px] ">

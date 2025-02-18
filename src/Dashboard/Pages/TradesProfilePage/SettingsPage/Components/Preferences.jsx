@@ -6,7 +6,7 @@ const Preferences = () => {
     const [promotionalMaterial, setPromotionalMaterial] = useState(false);
 
     return (
-        <div className="p-6 bg-white text-gray-700 rounded-lg ">
+        <div className=" bg-white text-gray-700 rounded-lg ">
             <h2 className="text-2xl font-semibold mb-4">Preferences</h2>
 
             {/* Busy Status */}
@@ -71,6 +71,9 @@ const Preferences = () => {
                         Receive Promotional Material (e.g., newsletters)
                     </span>
                 </label>
+
+
+                
             </div>
         </div>
     );

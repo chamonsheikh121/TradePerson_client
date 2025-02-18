@@ -66,7 +66,7 @@ const Login = () => {
         // Set redirection path based on role
         if (userRole === 'customer') {
           redirectPath = '/customer/dashboard';
-        } else if (userRole === 'tradesPerson') {
+        } else if (userRole === 'tradesperson') {
           redirectPath = '/tradePerson/dashboard';
         } else if (userRole === 'admin') {
           redirectPath = '/admin/dashboard';

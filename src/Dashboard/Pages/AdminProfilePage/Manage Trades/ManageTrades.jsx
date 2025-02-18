@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { FaCamera, FaTimes } from "react-icons/fa";
+import { FaCamera, FaEdit, FaTimes, FaTrash } from "react-icons/fa";
 import TradeManageCard from "./TradeManageCard";
 import { toast } from "sonner";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
@@ -9,10 +9,39 @@ const ManageTrades = () => {
   const [imagePreview, setImagePreview] = useState("");
   const [loading, setLoading] = useState(false);
   const [skills, setSkills] = useState([]);
-  const [trades, setTrades] = useState([]);
+  console.log(skills);
+  // const [trades, setTrades] = useState([]);
   const [skillInput, setSkillInput] = useState("");
   const [tradeImage, setTradeImage] = useState(null);
   const axiosSecure = useAxiosSecure();
+
+  const trades = [
+    {
+      title: "Electrician",
+      img: '',
+      description:
+        "Ensure your home’s electrical systems are safe and efficient with our expert electricians. From installations to repairs, we handle it all with precision and care.",
+      count: "28,765 electricians",
+      location: "in the UK",
+    },
+    {
+      title: "Plumber",
+      img: '',
+      description:
+        "Fix leaks and improve your plumbing with our skilled plumbers. Whether it’s installations or emergency repairs, we’ve got you covered.",
+      count: "19,432 plumbers",
+      location: "in the UK",
+    },
+    {
+      title: "Joiner",
+      img: '',
+      description:
+        "Craft beautiful and functional furniture or repair woodwork with the expertise of our Joiners. From cabinets to custom designs.",
+      count: "10,200 Joiners",
+      location: "in the UK",
+    },
+    // Add more trades here as needed...
+  ];
 
   const getTrades = async () => {
     try {
@@ -241,7 +270,30 @@ const ManageTrades = () => {
       <h1 className="my-10 text-3xl font-bold px-4">
         All <span className="text-green-600">Active</span> Trades
       </h1>
-      <TradeManageCard trades={trades} getTrades={getTrades} />
+      <div className="space-y-4">
+        {trades.map((trade) => (
+          <div key={trade._id} className="bg-white p-4 rounded-md shadow-md">
+            <h3 className="text-xl font-semibold">{trade.title}</h3>
+            <p>{trade.description}</p>
+            <div className="flex space-x-4 mt-4">
+              <button
+                onClick={() => handleEditTrade(trade)}
+                className="text-blue-500 hover:text-blue-700"
+              >
+                <FaEdit className="inline-block mr-2" />
+                Edit
+              </button>
+              <button
+                onClick={() => handleDeleteTrade(trade._id)}
+                className="text-red-500 hover:text-red-700"
+              >
+                <FaTrash className="inline-block mr-2" />
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

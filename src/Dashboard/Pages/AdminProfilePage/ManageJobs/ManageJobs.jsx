@@ -175,7 +175,7 @@ const ManageJobs = () => {
                 contact: { email: "designer@example.com", phone: "+880 9876-543210" },
             },
         ],
-        blockedJobs: [
+        deletedJobs: [
             {
                 id: 1,
                 owner: {
@@ -217,7 +217,7 @@ const ManageJobs = () => {
 
         { key: "activeJobs", label: "Active Jobs" },
         { key: "pendingJobs", label: "Pending Jobs" },
-        { key: "blockedJobs", label: "Blocked Jobs" }
+        { key: "deletedJobs", label: "Deleted Jobs" }
     ];
 
 
@@ -263,7 +263,7 @@ const ManageJobs = () => {
 
             <div className='bg-white mt-4 p-10'>
 
-                <div className='grid grid-cols-4 gap-2 gap-y-4'>
+                <div className='grid grid-cols-3 gap-10 gap-y-4'>
                     {
                         filteredData?.length > 0 ? filteredData?.map((job, i) => <JobCard job={job} />) : <div>
                             <h4>No {activeTab} job found</h4>

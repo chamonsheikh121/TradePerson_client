@@ -11,11 +11,7 @@ const CustomerDashBNavItem = ({ isSidebarOpen }) => {
 
 
     const Routes = [
-        {
-            path: "/customer/dashboard",
-            label: "dashboard",
-            icon: <LuLayoutDashboard size={25} />,
-        },
+      
         {
             path: "/customer/profile",
             label: "profile",

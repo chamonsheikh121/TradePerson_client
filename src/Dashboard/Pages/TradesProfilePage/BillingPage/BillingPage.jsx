@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import PaymentMethod from './Components/PaymentMethod';
-import Invoice from './Components/Invoice';
-import Charges from './Components/Charges';
+
 import History from './Components/History';
 
 const BillingPage = () => {
@@ -30,26 +29,8 @@ const BillingPage = () => {
         >
           Payment Methods
         </button>
-        <button
-          className={`py-2 px-6 text-lg font-medium ${
-            activeTab === 'invoices'
-              ? 'text-green-600 border-b-2 border-green-600'
-              : 'text-gray-600 hover:text-green-500'
-          }`}
-          onClick={() => setActiveTab('invoices')}
-        >
-          Invoices
-        </button>
-        <button
-          className={`py-2 px-6 text-lg font-medium ${
-            activeTab === 'charges'
-              ? 'text-green-600 border-b-2 border-green-600'
-              : 'text-gray-600 hover:text-green-500'
-          }`}
-          onClick={() => setActiveTab('charges')}
-        >
-          Charges
-        </button>
+       
+       
         <button
           className={`py-2 px-6 text-lg font-medium ${
             activeTab === 'history'
@@ -68,13 +49,6 @@ const BillingPage = () => {
           <PaymentMethod/>
         )}
 
-        {activeTab === 'invoices' && (
-         <Invoice/>
-        )}
-
-        {activeTab === 'charges' && (
-          <Charges/>
-        )}
 
         {activeTab === 'history' && (
           <History/>
