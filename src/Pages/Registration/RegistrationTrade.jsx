@@ -80,79 +80,109 @@ const RegistrationTrade = () => {
 
   const toggleCompanyInput = () => setShowCompanyInput(!showCompanyInput);
 
-  // Submit form
+
+  // RegistrationTrade.jsx
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      formDataToSend.append(key, value);
-    });
+    if (loading) return;
 
-    formDataToSend.append("profileImage", images.profileImage);
-    formDataToSend.append("insuranceImage", images.insuranceImage);
-    formDataToSend.append("licenseImage", images.licenseImage);
-
-    if (formData.password === formData.confirmPassword) {
-      if (images.profileImage) {
-        if (!showCompanyInput) {
-          try {
-            const response = await axiosSecure.post("/auth/tradesperson/register", formDataToSend );
-            toast.success(response.data.message);
-            setLoading(false);
-            navigate('/');
-          } catch (error) {
-            console.log(error);
-            setLoading(false);
-            toast.error(error?.response?.data?.message || " Something went wrong");
-          }
-
-        } else {
-          if (formData.companyName) {
-            if (formData.registrationNumber) {
-              if (images.insuranceImage) {
-                try {
-                  const response = await axiosSecure.post("/auth/tradesperson/register", formDataToSend );
-                  toast.success(response.data.message);
-                  setLoading(false);
-                  navigate('/');
-                } catch (error) {
-                  console.log(error);
-                  setLoading(false);
-                  toast.error(error?.response?.data?.message || " Something went wrong");
-                }
-              } else {
-                setLoading(false);
-                toast("Company Insurance is Required!");
-              }
-            } else {
-              setLoading(false);
-              toast("Company registration number is Required!");
-            }
-          } else {
-            setLoading(false);
-            toast("Company name is Required!");
-          }
-        }
-      } else {
-        setLoading(false);
-        toast("Upload a Profile Image!");
-      }
-    } else {
-      setLoading(false);
-      toast("Password & Confirm Password Doesn't match!");
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords don't match!");
+      return;
     }
 
-    // try {
-    //   const response = await axios.post("/tradesperson/register", formDataToSend, {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   });
-    //   console.log("Success:", response.data);
-    //   alert("Registration successful!");
-    // } catch (error) {
-    //   console.error("Error:", error.response?.data || error.message);
-    //   alert("Registration failed!");
-    // }
+    if (!images.profileImage) {
+      toast.error("Upload a profile image!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Validate company information if needed
+      if (showCompanyInput) {
+        if (!formData.companyName) {
+          throw new Error("Company name is required!");
+        }
+        if (!formData.registrationNumber) {
+          throw new Error("Company registration number is required!");
+        }
+        if (!images.insuranceImage) {
+          throw new Error("Company insurance is required!");
+        }
+      }
+
+      // Create FormData object
+      const formDataToSend = new FormData();
+
+      // Add form fields (excluding confirmPassword)
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key !== 'confirmPassword' && value) {
+          formDataToSend.append(key, value);
+        }
+      });
+
+      // Add images
+      if (images.profileImage) {
+        formDataToSend.append('profileImage', images.profileImage);
+      }
+      if (images.insuranceImage) {
+        formDataToSend.append('insuranceImage', images.insuranceImage);
+      }
+      if (images.licenseImage) {
+        formDataToSend.append('licenseImage', images.licenseImage);
+      }
+
+      const response = await axiosSecure.post(
+        "/auth/tradesperson/register",
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+
+        // Reset form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+          trade: "",
+          postcode: "",
+          experience: "",
+          companyName: "",
+          registrationNumber: ""
+        });
+
+        setImages({
+          profileImage: null,
+          insuranceImage: null,
+          licenseImage: null
+        });
+
+        setImagePreview("");
+        setCertificationPreview("");
+        setShowCompanyInput(false);
+
+        // Navigate after a short delay
+        setTimeout(() => {
+          navigate('/account/login');
+        }, 1500); // Give time for the success message to be seen
+      }
+
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || "Registration failed";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -203,7 +233,7 @@ const RegistrationTrade = () => {
         {/* Personal Information */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               First Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -212,11 +242,11 @@ const RegistrationTrade = () => {
               required
               type="text"
               placeholder="First Name"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Last Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -225,14 +255,14 @@ const RegistrationTrade = () => {
               required
               type="text"
               placeholder="Last Name"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -241,11 +271,11 @@ const RegistrationTrade = () => {
               required
               type="email"
               placeholder="Email Address"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Phone Number <span className="text-red-500">*</span>
             </label>
             <input
@@ -254,7 +284,7 @@ const RegistrationTrade = () => {
               required
               type="text"
               placeholder="Phone Number"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -262,7 +292,7 @@ const RegistrationTrade = () => {
         {/* Password Section */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Password <span className="text-red-500">*</span>
             </label>
             <input
@@ -271,7 +301,7 @@ const RegistrationTrade = () => {
               required
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div
               onClick={() => setShowPassword(!showPassword)}
@@ -281,7 +311,7 @@ const RegistrationTrade = () => {
             </div>
           </div>
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Confirm Password <span className="text-red-500">*</span>
             </label>
             <input
@@ -290,7 +320,7 @@ const RegistrationTrade = () => {
               required
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm Password"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -308,23 +338,23 @@ const RegistrationTrade = () => {
         {/* Trade Information */}
         <div className="grid md:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Trade/Profession <span className="text-red-500">*</span>
             </label>
             <select
               required
               onChange={(e) => handleChange(e)}
               name="trade"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Trade</option>
               {
-                trades.map((trade)=><option key={trade._id} value={trade._id}>{trade.name}</option>)
+                trades.map((trade) => <option key={trade._id} value={trade._id}>{trade.name}</option>)
               }
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Years of Experience <span className="text-red-500">*</span>
             </label>
             <input
@@ -333,11 +363,11 @@ const RegistrationTrade = () => {
               required
               type="number"
               placeholder="Years of Experience"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Post Code <span className="text-red-500">*</span>
             </label>
             <input
@@ -346,13 +376,13 @@ const RegistrationTrade = () => {
               required
               type="number"
               placeholder="Post code"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm mb-1 font-medium text-gray-700">
             Certifications/Licenses (Upload){" "}
             <span className="text-red-500">*</span>
           </label>
@@ -362,7 +392,7 @@ const RegistrationTrade = () => {
               required
               accept="image/*"
               onChange={handleCertificationUpload}
-              className="w-full px-4 py-2 border rounded"
+              className="w-full px-4 py-3 bg-gray-50 border rounded"
             />
             {certificationPreview && (
               <img
@@ -390,7 +420,7 @@ const RegistrationTrade = () => {
             <div>
               <div className="grid md:grid-cols-2 gap-6 mt-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm mb-1 font-medium text-gray-700">
                     Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -398,11 +428,11 @@ const RegistrationTrade = () => {
                     name="companyName"
                     type="text"
                     placeholder="Company Name"
-                    className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm mb-1 font-medium text-gray-700">
                     Proof of Insurance (Upload)
                   </label>
                   <input
@@ -414,12 +444,12 @@ const RegistrationTrade = () => {
                     }}
                     type="file"
                     accept=".jpg,.jpeg,.png"
-                    className="w-full px-4 py-2 border rounded"
+                    className="w-full px-4 py-3 bg-gray-50 border rounded"
                   />
                 </div>
               </div>
               <div className="mt-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm mb-1 font-medium text-gray-700">
                   Registration Number <span className="text-red-500"></span>
                 </label>
                 <input
@@ -427,7 +457,7 @@ const RegistrationTrade = () => {
                   name="registrationNumber"
                   type="text"
                   placeholder="Registration Number"
-                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
             </div>
@@ -446,13 +476,39 @@ const RegistrationTrade = () => {
           </p>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center"> 
           <button
             type="submit"
             disabled={loading}
-            className="btn w-max px-10 py-3 bg-green-500 text-white font-bold rounded hover:bg-green-600"
+            className="w-full py-3 text-white bg-green-500 hover:bg-green-600 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading? "Registering..." : "Register"}
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Registering...
+              </div>
+            ) : (
+              "Register"
+            )}
           </button>
         </div>
 

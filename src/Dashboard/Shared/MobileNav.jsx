@@ -14,7 +14,7 @@ const MobileNavbar = ({ userRole }) => {
   // Dynamic component mapping
   const roleComponentMap = {
     customer: CustomerDashBNavItem,
-    "tradePerson": TradesPeopleDashBNavItem,
+    "tradeperson": TradesPeopleDashBNavItem,
     admin: AdminDashBNavItem,
   };
 
