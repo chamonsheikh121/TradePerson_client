@@ -12,7 +12,7 @@ const Banner = () => {
 
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight">
 
-          Find Trusted Tradespeople Near You
+          Find Trusted Tradespeople <br /> Near You
         </h1>
         <p className="mt-4 text-lg md:text-xl max-w-2xl">
           Connect with skilled professionals in your area for all your needs.

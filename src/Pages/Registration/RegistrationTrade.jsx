@@ -203,7 +203,7 @@ const RegistrationTrade = () => {
         {/* Personal Information */}
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               First Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -212,11 +212,11 @@ const RegistrationTrade = () => {
               required
               type="text"
               placeholder="First Name"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Last Name <span className="text-red-500">*</span>
             </label>
             <input
@@ -225,14 +225,14 @@ const RegistrationTrade = () => {
               required
               type="text"
               placeholder="Last Name"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Email <span className="text-red-500">*</span>
             </label>
             <input
@@ -241,11 +241,11 @@ const RegistrationTrade = () => {
               required
               type="email"
               placeholder="Email Address"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Phone Number <span className="text-red-500">*</span>
             </label>
             <input
@@ -254,7 +254,7 @@ const RegistrationTrade = () => {
               required
               type="text"
               placeholder="Phone Number"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
@@ -262,7 +262,7 @@ const RegistrationTrade = () => {
         {/* Password Section */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Password <span className="text-red-500">*</span>
             </label>
             <input
@@ -271,7 +271,7 @@ const RegistrationTrade = () => {
               required
               type={showPassword ? "text" : "password"}
               placeholder="Password"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div
               onClick={() => setShowPassword(!showPassword)}
@@ -281,7 +281,7 @@ const RegistrationTrade = () => {
             </div>
           </div>
           <div className="relative">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Confirm Password <span className="text-red-500">*</span>
             </label>
             <input
@@ -290,7 +290,7 @@ const RegistrationTrade = () => {
               required
               type={showConfirmPassword ? "text" : "password"}
               placeholder="Confirm Password"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
             <div
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -308,14 +308,14 @@ const RegistrationTrade = () => {
         {/* Trade Information */}
         <div className="grid md:grid-cols-3 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Trade/Profession <span className="text-red-500">*</span>
             </label>
             <select
               required
               onChange={(e) => handleChange(e)}
               name="trade"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
               <option value="">Select Trade</option>
               {
@@ -324,7 +324,7 @@ const RegistrationTrade = () => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Years of Experience <span className="text-red-500">*</span>
             </label>
             <input
@@ -333,11 +333,11 @@ const RegistrationTrade = () => {
               required
               type="number"
               placeholder="Years of Experience"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm mb-1 font-medium text-gray-700">
               Post Code <span className="text-red-500">*</span>
             </label>
             <input
@@ -346,13 +346,13 @@ const RegistrationTrade = () => {
               required
               type="number"
               placeholder="Post code"
-              className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">
+          <label className="block text-sm mb-1 font-medium text-gray-700">
             Certifications/Licenses (Upload){" "}
             <span className="text-red-500">*</span>
           </label>
@@ -362,7 +362,7 @@ const RegistrationTrade = () => {
               required
               accept="image/*"
               onChange={handleCertificationUpload}
-              className="w-full px-4 py-2 border rounded"
+              className="w-full px-4 py-3 bg-gray-50 border rounded"
             />
             {certificationPreview && (
               <img
@@ -390,7 +390,7 @@ const RegistrationTrade = () => {
             <div>
               <div className="grid md:grid-cols-2 gap-6 mt-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm mb-1 font-medium text-gray-700">
                     Company Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -398,11 +398,11 @@ const RegistrationTrade = () => {
                     name="companyName"
                     type="text"
                     placeholder="Company Name"
-                    className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                    className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700">
+                  <label className="block text-sm mb-1 font-medium text-gray-700">
                     Proof of Insurance (Upload)
                   </label>
                   <input
@@ -414,12 +414,12 @@ const RegistrationTrade = () => {
                     }}
                     type="file"
                     accept=".jpg,.jpeg,.png"
-                    className="w-full px-4 py-2 border rounded"
+                    className="w-full px-4 py-3 bg-gray-50 border rounded"
                   />
                 </div>
               </div>
               <div className="mt-2">
-                <label className="block text-sm font-medium text-gray-700">
+                <label className="block text-sm mb-1 font-medium text-gray-700">
                   Registration Number <span className="text-red-500"></span>
                 </label>
                 <input
@@ -427,7 +427,7 @@ const RegistrationTrade = () => {
                   name="registrationNumber"
                   type="text"
                   placeholder="Registration Number"
-                  className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="w-full px-4 py-3 bg-gray-50 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
               </div>
             </div>

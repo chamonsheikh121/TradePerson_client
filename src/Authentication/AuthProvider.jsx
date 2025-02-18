@@ -17,10 +17,7 @@ const AuthProvider = ({ children }) => {
 
   const axiosSecure = useAxiosSecure();
   // const navigate = useNavigate();
-
-
   // Check authentication status on initial load
-
   // Function to manually update authentication status
   const loginSuccess = () => {
     axiosSecure

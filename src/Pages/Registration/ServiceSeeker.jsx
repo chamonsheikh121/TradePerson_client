@@ -318,6 +318,17 @@ const ServiceSeeker = () => {
         >
           Create Account
         </button>
+        <div>
+          <p className="text-center text-sm text-gray-700">
+            <span className="">Already have account?</span>{" "}
+            <Link
+              to={"/account/login"}
+              className="text-green-600 hover:underline underline-offset-4 underline"
+            >
+              login now
+            </Link>
+          </p>
+        </div>
       </form>
     </div>
   );
