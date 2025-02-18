@@ -10,7 +10,9 @@ const MainLayout = () => {
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
-  const {userRole} = useContext(AuthContext);
+  const { userRole, user } = useContext(AuthContext);
+
+  console.log(user);
 
   const navLinks = [
     { path: "/", label: "Home" },
@@ -33,18 +35,30 @@ const MainLayout = () => {
           {label}
         </NavLink>
       ))}
-      <NavLink
-        to="/post-job"
-        className="border border-pink-600 text-pink-600 px-6 py-2 rounded-md transition-all hover:bg-pink-600 hover:text-white"
-      >
-        Post a job
-      </NavLink>
-      <NavLink
-        to="/register-as/trades-people"
-        className="border border-green-600 text-green-600 px-5 py-2 rounded-md transition-all hover:bg-green-600 hover:text-white"
-      >
-        Trade signup
-      </NavLink>
+      {
+        userRole == 'tradesperson' || 'admin' && <NavLink
+          to="/post-job"
+          className="block text-center border border-pink-600 text-pink-600 px-6 py-2 rounded-md transition-all hover:bg-pink-600 hover:text-white"
+          onClick={toggleMenu}
+        >
+          Post a job
+        </NavLink>
+      }
+      {
+        user ? <NavLink
+          to={userRole ? `/${userRole}/profile` : `/admin/profile`}
+          className="block text-center border border-green-600 text-green-600 px-6 py-2 rounded-md transition-all hover:bg-green-600 hover:text-white"
+          onClick={toggleMenu}
+        >
+          My account
+        </NavLink> : <NavLink
+          to="/register-as/trades-people"
+          className="block text-center border border-green-600 text-green-600 px-6 py-2 rounded-md transition-all hover:bg-green-600 hover:text-white"
+          onClick={toggleMenu}
+        >
+          Trade signup
+        </NavLink>
+      }
     </ul>
   );
 
@@ -57,9 +71,9 @@ const MainLayout = () => {
             <button onClick={toggleMenu} className="lg:hidden mr-5">
               <IoMenuSharp size={25} />
             </button>
-            <Link to={userRole? `/${userRole}/profile` : `/admin/profile`}>
-              <img src={logo} alt="Logo" className="h-20 bg-transparent lg:block hidden mr-5" />
-            </Link>
+
+            <img src={logo} alt="Logo" className="h-20 bg-transparent lg:block hidden mr-5" />
+
           </div>
           <div className="hidden lg:block">{navContent}</div>
         </div>
@@ -84,20 +98,38 @@ const MainLayout = () => {
                   {label}
                 </NavLink>
               ))}
-              <NavLink
-                to="/post-job"
-                className="block text-center border border-pink-600 text-pink-600 px-6 py-2 rounded-md transition-all hover:bg-pink-600 hover:text-white"
-                onClick={toggleMenu}
-              >
-                Post a job
-              </NavLink>
-              <NavLink
-                to="/register-as/trades-people"
-                className="block text-center border border-green-600 text-green-600 px-6 py-2 rounded-md transition-all hover:bg-green-600 hover:text-white"
-                onClick={toggleMenu}
-              >
-                Trade signup
-              </NavLink>
+
+              {
+                userRole != 'tradesperson' || 'admin' && <NavLink
+                  to="/post-job"
+                  className="block text-center border border-pink-600 text-pink-600 px-6 py-2 rounded-md transition-all hover:bg-pink-600 hover:text-white"
+                  onClick={toggleMenu}
+                >
+                  Post a job
+                </NavLink>
+              }
+
+
+              {
+                user ? <NavLink
+                  to="/register-as/trades-people"
+                  className="block text-center border border-green-600 text-green-600 px-6 py-2 rounded-md transition-all hover:bg-green-600 hover:text-white"
+                  onClick={toggleMenu}
+                >
+                  My account
+                </NavLink> : <NavLink
+                  to="/register-as/trades-people"
+                  className="block text-center border border-green-600 text-green-600 px-6 py-2 rounded-md transition-all hover:bg-green-600 hover:text-white"
+                  onClick={toggleMenu}
+                >
+                  Trade signup
+                </NavLink>
+              }
+
+
+
+
+
             </ul>
           </div>
         </div>

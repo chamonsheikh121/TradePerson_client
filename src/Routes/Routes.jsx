@@ -33,6 +33,9 @@ import ManageTrades from "../Dashboard/Pages/AdminProfilePage/Manage Trades/Mana
 import ManageMembershipPackage from "../Dashboard/Pages/AdminProfilePage/ManageMembershipPackage/ManageMembershipPackage";
 import ManageCredits from "../Dashboard/Pages/AdminProfilePage/ManageCredits/ManageCredits";
 import MessagePage from "../Dashboard/Pages/MessagePage/MessagePage";
+import EmailVerification from "../Pages/EmailVerification/EmailVerification";
+import ResendVerification from "../Pages/ResendVerification/ResendVerification";
+import { ROLES } from "../config/roles";
 
 const Routes = createBrowserRouter([
     {
@@ -82,7 +85,15 @@ const Routes = createBrowserRouter([
                 path: 'account/password-reset',
                 element: <ResetPassword />
 
+            }, 
+            {
+                path: '/verify-email',
+                element: <EmailVerification />
             },
+            {
+                path: '/resend-verification',
+                element: <ResendVerification />
+            }
         ]
     },
     {
@@ -95,7 +106,7 @@ const Routes = createBrowserRouter([
     // customer dashboard all routes
     {
         path: 'customer',
-        element: <ProtectedRoute requiredRole={["customer"]} ><Dashboard /></ProtectedRoute>,
+        element: <ProtectedRoute requiredRoles={[ROLES.CUSTOMER]}><Dashboard /></ProtectedRoute>,
         children: [
             {
                 path: 'profile',
@@ -112,10 +123,9 @@ const Routes = createBrowserRouter([
 
     // trades-people dashboard all routes
     {
-        path: 'tradePerson',
-        element: <ProtectedRoute requiredRole={["tradePerson"]} ><Dashboard /></ProtectedRoute>,
-        // errorElement:<PlanningToDesign/>,
-        children: [
+        path: 'tradesperson',
+        element: <ProtectedRoute requiredRoles={[ROLES.TRADESPERSON]}><Dashboard /></ProtectedRoute>,
+         children: [
             {
                 path: 'dashboard',
                 // element: <TradesDashboard/>
@@ -173,7 +183,7 @@ const Routes = createBrowserRouter([
     // admin dashboard all routes
     {
         path: 'admin',
-        element: <ProtectedRoute requiredRole={["admin"]} ><Dashboard /></ProtectedRoute>,
+        element: <ProtectedRoute requiredRoles={[ROLES.ADMIN]}><Dashboard /></ProtectedRoute>,
         children: [
             {
                 path: 'dashboard',

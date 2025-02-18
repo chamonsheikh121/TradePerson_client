@@ -1,16 +1,40 @@
 import { Link } from 'react-router-dom';
 import ProfileCompletion from './ProfileCompletion'
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../../../../Authentication/AuthProvider';
-const ProfileHeader = () => {
+const ProfileHeader = ({profile}) => {
 
-    const {user} = useContext(AuthContext);
-    console.log(user);
+    const { user } = useContext(AuthContext);
+
+    const [progress, setProgress] = useState(0);
+    console.log(progress);
+
+    useEffect(() => {
+        console.log(user);
+        const requiredFields = [
+            profile.experience,
+            profile.galleryImages?.length > 0,
+            profile.selectedTrade,
+            profile.skills?.length > 0,
+            profile.profile?.email,
+            profile.profile?.firstName && profile.user?.lastName,
+            profile.profile?.phone,
+            profile.profile?.profilePicture,
+        ];
+
+        const completedFields = requiredFields.filter(Boolean).length;
+        const progressPercentage = (completedFields / requiredFields.length) * 100;
+
+        setProgress(progressPercentage);
+    }, [profile]);
+
+
+
 
     return (
         <div className="flex p-10 flex-col lg:flex-row shadow-md rounded-md  bg-white items-center gap-10">
 
-            <ProfileCompletion h={52} w={52} heading={'Profile update'} progress={50} />
+            <ProfileCompletion h={52} w={52} heading={'Profile update'} progress={progress} />
 
             <div className="flex-1 space-y-4">
                 <div>

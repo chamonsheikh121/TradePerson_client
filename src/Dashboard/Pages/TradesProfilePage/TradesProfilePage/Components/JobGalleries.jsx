@@ -10,7 +10,7 @@ import { progress } from 'framer-motion';
 
 const JobGalleries = ({ user }) => {
   const [images, setImages] = useState([]);
-  const [progress, setProgress] = useState()
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,17 +36,7 @@ const JobGalleries = ({ user }) => {
 
   // }, [axiosSecure]); 
 
-  useEffect(() => {
 
-    let imageProgress = 0;
-    if (images?.length == 1) {
-      imageProgress = 50;
-    } else if (images.length >= 2) {
-      imageProgress = 100;
-    }
-
-    setProgress(imageProgress);
-  }, [images]); // Add dependencies to re-run when they change
 
 
   // Open Modal
@@ -137,11 +127,7 @@ const JobGalleries = ({ user }) => {
 
   return (
     <div className="p-10 lg:px-32 space-y-4 rounded-md shadow-md bg-white">
-      <div className="flex justify-end">
-        {
-          progress == 100 ? <p className="border p-2 border-green-400 rounded-full"><FaCheck size={25} className="text-green-700" /> </p> : <ProfileCompletion h={10} w={10} heading={''} progress={progress} />
-        }
-      </div>
+     
       {/* Upload Section */}
       <label className="border flex cursor-pointer hover:bg-gray-100 transition-all justify-center items-center border-dashed border-gray-600 h-40">
         <div className="flex flex-col items-center gap-2">

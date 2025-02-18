@@ -152,14 +152,15 @@ const BusinessAddress = ({ user }) => {
                 />
               </div>
             </div>
-          </>
-        )}
-        <button
+            <button
           type="submit"
           className="px-10 py-3 text-white bg-pink-500 hover:bg-pink-600 rounded-lg shadow-md transition-all duration-200"
         >
           Change Address
         </button>
+          </>
+        )}
+        
       </form>
     </div>
   );

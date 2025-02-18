@@ -157,7 +157,7 @@ const JobPage = () => {
             </div>
 
             {/* See Job Button */}
-            <Link to={`/tradePerson/jobs/${job?.id}`}
+            <Link to={`/tradesperson/jobs/${job?.id}`}
             >
               <button className="py-2 bg-pink-700 text-white w-full mt-4">See details</button>
 

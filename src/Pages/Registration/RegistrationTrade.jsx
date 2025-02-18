@@ -80,79 +80,109 @@ const RegistrationTrade = () => {
 
   const toggleCompanyInput = () => setShowCompanyInput(!showCompanyInput);
 
-  // Submit form
+
+  // RegistrationTrade.jsx
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    const formDataToSend = new FormData();
-    Object.entries(formData).forEach(([key, value]) => {
-      formDataToSend.append(key, value);
-    });
+    if (loading) return;
 
-    formDataToSend.append("profileImage", images.profileImage);
-    formDataToSend.append("insuranceImage", images.insuranceImage);
-    formDataToSend.append("licenseImage", images.licenseImage);
-
-    if (formData.password === formData.confirmPassword) {
-      if (images.profileImage) {
-        if (!showCompanyInput) {
-          try {
-            const response = await axiosSecure.post("/auth/tradesperson/register", formDataToSend );
-            toast.success(response.data.message);
-            setLoading(false);
-            navigate('/');
-          } catch (error) {
-            console.log(error);
-            setLoading(false);
-            toast.error(error?.response?.data?.message || " Something went wrong");
-          }
-
-        } else {
-          if (formData.companyName) {
-            if (formData.registrationNumber) {
-              if (images.insuranceImage) {
-                try {
-                  const response = await axiosSecure.post("/auth/tradesperson/register", formDataToSend );
-                  toast.success(response.data.message);
-                  setLoading(false);
-                  navigate('/');
-                } catch (error) {
-                  console.log(error);
-                  setLoading(false);
-                  toast.error(error?.response?.data?.message || " Something went wrong");
-                }
-              } else {
-                setLoading(false);
-                toast("Company Insurance is Required!");
-              }
-            } else {
-              setLoading(false);
-              toast("Company registration number is Required!");
-            }
-          } else {
-            setLoading(false);
-            toast("Company name is Required!");
-          }
-        }
-      } else {
-        setLoading(false);
-        toast("Upload a Profile Image!");
-      }
-    } else {
-      setLoading(false);
-      toast("Password & Confirm Password Doesn't match!");
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("Passwords don't match!");
+      return;
     }
 
-    // try {
-    //   const response = await axios.post("/tradesperson/register", formDataToSend, {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   });
-    //   console.log("Success:", response.data);
-    //   alert("Registration successful!");
-    // } catch (error) {
-    //   console.error("Error:", error.response?.data || error.message);
-    //   alert("Registration failed!");
-    // }
+    if (!images.profileImage) {
+      toast.error("Upload a profile image!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      // Validate company information if needed
+      if (showCompanyInput) {
+        if (!formData.companyName) {
+          throw new Error("Company name is required!");
+        }
+        if (!formData.registrationNumber) {
+          throw new Error("Company registration number is required!");
+        }
+        if (!images.insuranceImage) {
+          throw new Error("Company insurance is required!");
+        }
+      }
+
+      // Create FormData object
+      const formDataToSend = new FormData();
+
+      // Add form fields (excluding confirmPassword)
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key !== 'confirmPassword' && value) {
+          formDataToSend.append(key, value);
+        }
+      });
+
+      // Add images
+      if (images.profileImage) {
+        formDataToSend.append('profileImage', images.profileImage);
+      }
+      if (images.insuranceImage) {
+        formDataToSend.append('insuranceImage', images.insuranceImage);
+      }
+      if (images.licenseImage) {
+        formDataToSend.append('licenseImage', images.licenseImage);
+      }
+
+      const response = await axiosSecure.post(
+        "/auth/tradesperson/register",
+        formDataToSend,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      if (response.data.success) {
+        toast.success(response.data.message);
+
+        // Reset form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          phone: "",
+          password: "",
+          confirmPassword: "",
+          trade: "",
+          postcode: "",
+          experience: "",
+          companyName: "",
+          registrationNumber: ""
+        });
+
+        setImages({
+          profileImage: null,
+          insuranceImage: null,
+          licenseImage: null
+        });
+
+        setImagePreview("");
+        setCertificationPreview("");
+        setShowCompanyInput(false);
+
+        // Navigate after a short delay
+        setTimeout(() => {
+          navigate('/account/login');
+        }, 1500); // Give time for the success message to be seen
+      }
+
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message || "Registration failed";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -319,7 +349,7 @@ const RegistrationTrade = () => {
             >
               <option value="">Select Trade</option>
               {
-                trades.map((trade)=><option key={trade._id} value={trade._id}>{trade.name}</option>)
+                trades.map((trade) => <option key={trade._id} value={trade._id}>{trade.name}</option>)
               }
             </select>
           </div>
@@ -446,13 +476,39 @@ const RegistrationTrade = () => {
           </p>
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center"> 
           <button
             type="submit"
             disabled={loading}
-            className="btn w-max px-10 py-3 bg-green-500 text-white font-bold rounded hover:bg-green-600"
+            className="w-full py-3 text-white bg-green-500 hover:bg-green-600 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading? "Registering..." : "Register"}
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <svg
+                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                Registering...
+              </div>
+            ) : (
+              "Register"
+            )}
           </button>
         </div>
 

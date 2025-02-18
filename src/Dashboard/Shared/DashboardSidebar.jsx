@@ -1,16 +1,33 @@
-
 import { IoMdMenu } from "react-icons/io";
 import CustomerDashBNavItem from "../Shared/CustomerDashBNavItem";
 import TradesPeopleDashBNavItem from "../Shared/TradesPeopleDashBNavItem";
 import AdminDashBNavItem from "../Shared/AdminDashBNavItem";
-
+import { ROLES } from '../../config/roles'; // Import the roles configuration
 
 const DashboardSidebar = ({ isSidebarOpen, toggleSidebar, userRole }) => {
+    // Normalize and validate role
+    const normalizedRole = userRole?.toLowerCase();
+
+    // Determine which navigation items to render
+    const renderNavItems = () => {
+        switch (normalizedRole) {
+            case ROLES.CUSTOMER:
+                return <CustomerDashBNavItem isSidebarOpen={isSidebarOpen} />;
+            case ROLES.TRADESPERSON:
+                return <TradesPeopleDashBNavItem isSidebarOpen={isSidebarOpen} />;
+            case ROLES.ADMIN:
+                return <AdminDashBNavItem isSidebarOpen={isSidebarOpen} />;
+            default:
+                return (
+                    <div className="text-center text-red-500 p-4">
+                        No navigation items available for this role
+                    </div>
+                );
+        }
+    };
 
     return (
         <aside className="hidden overflow-auto md:block bg-white shadow-lg sticky top-0 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-200">
-
-
             <div className={`${!isSidebarOpen ? 'p-6' : 'p-0'} border-b border-gray-300 h-20`}>
                 <h1
                     className={`${isSidebarOpen ? "hidden" : "block"
@@ -37,15 +54,7 @@ const DashboardSidebar = ({ isSidebarOpen, toggleSidebar, userRole }) => {
                     </button>
                 </div>
                 <div className="flex-1">
-                    {
-                        userRole === "customer" ? (
-                            <CustomerDashBNavItem isSidebarOpen={isSidebarOpen} />
-                        ) : userRole === "tradePerson" ? (
-                            <TradesPeopleDashBNavItem isSidebarOpen={isSidebarOpen} />
-                        ) : (
-                            <AdminDashBNavItem isSidebarOpen={isSidebarOpen} />
-                        )
-                    }
+                    {renderNavItems()}
                 </div>
             </div>
         </aside>
